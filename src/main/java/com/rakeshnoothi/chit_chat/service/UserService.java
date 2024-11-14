@@ -1,0 +1,48 @@
+package com.rakeshnoothi.chit_chat.service;
+
+import java.util.Optional;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
+import com.rakeshnoothi.chit_chat.dto.FriendDTO;
+import com.rakeshnoothi.chit_chat.dto.UserDTO;
+import com.rakeshnoothi.chit_chat.entity.User;
+import com.rakeshnoothi.chit_chat.exception.UserNotFoundException;
+import com.rakeshnoothi.chit_chat.repo.UserRepo;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class UserService {
+	
+	private final UserRepo userRepo;
+	
+	public Set<FriendDTO> getUserFriends(Long userId){
+		Optional<User> user = this.userRepo.findById(userId);
+		if(!user.isPresent())throw new UserNotFoundException("User with the id " + userId + " does not exist");
+		
+		Set<FriendDTO> userFriends = this.userRepo.findFriendsByUserId(userId);
+		return userFriends;
+	}
+	
+	
+	public UserDTO getUser(Long userId) {
+		Optional<User> optionalUser = this.userRepo.findById(userId);
+		
+		if(!optionalUser.isPresent())throw new UserNotFoundException("User with the id " + userId + " does not exist");
+		
+		User user = optionalUser.get();
+		
+		UserDTO userDTO = UserDTO.builder()
+				.id(user.getId())
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.username(user.getUsername())
+				.email(user.getEmail())
+				.build();
+		
+		return userDTO;
+	}
+}
