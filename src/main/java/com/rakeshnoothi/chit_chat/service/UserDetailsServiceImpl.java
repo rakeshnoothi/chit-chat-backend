@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 import com.rakeshnoothi.chit_chat.entity.User;
 import com.rakeshnoothi.chit_chat.repo.UserRepo;
 
+import lombok.RequiredArgsConstructor;
 
+
+@RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 	
 	@Autowired
-	private UserRepo userRepository;
+	private final UserRepo userRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

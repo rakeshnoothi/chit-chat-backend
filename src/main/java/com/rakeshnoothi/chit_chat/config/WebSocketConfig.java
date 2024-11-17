@@ -1,5 +1,6 @@
 package com.rakeshnoothi.chit_chat.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -29,6 +30,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
-		registration.interceptors(new UserInterceptor());
+		registration.interceptors(userInterceptor());
+	}
+	
+	@Bean
+	public UserInterceptor userInterceptor() {
+		return new UserInterceptor();
 	}
 }

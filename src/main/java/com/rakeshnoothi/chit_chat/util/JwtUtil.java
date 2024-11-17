@@ -17,18 +17,17 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 	
 	@Value("${jwt.expiresMs}")
-	private static Long expiersMs;
+	private Long expiresMs;
 	
 	@Value("${jwt.secret}")
-	private static String SECRET_KEY;
+	private String SECRET_KEY;
 	
 	public Long getExpiresInMs() {
-		return expiersMs;
+		return this.expiresMs;
 	}
 	
 	public String getUsernameFromToken(String token) {
 		Claims claims = getAllClaimsFromToken(token);
-		System.out.println("All claims recevied");
 		return claims.getSubject();
 	}
 	
@@ -53,7 +52,7 @@ public class JwtUtil {
 	
 	// Build JWT token with claims
 	 public String buildJwtToken(String username) {
-		 Long expirationTime = System.currentTimeMillis() + expiersMs;
+		 Long expirationTime = System.currentTimeMillis() + this.expiresMs;
 		 return Jwts.builder()
 				    .issuer("me")
 				    .subject(username)
@@ -65,7 +64,7 @@ public class JwtUtil {
 	 
 	 // Generate a key for signature
 	 private SecretKey getSignatureKey() {
-		 return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+		 return Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.SECRET_KEY));
 	 }
 	 
 	 // validate the token
