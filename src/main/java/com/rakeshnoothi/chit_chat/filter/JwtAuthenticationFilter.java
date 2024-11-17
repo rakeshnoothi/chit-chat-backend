@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			}catch(ExpiredJwtException ee) {
 				String jsonResponse = createJsonString(LocalDateTime.now(), 
 									HttpStatus.UNAUTHORIZED.value(),
-									"The token has expired",
+									"Token expired",
 									""
 								);
 				 response.setContentType("application/json");
@@ -79,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			}catch(Exception e) {
 				String jsonResponse = createJsonString(LocalDateTime.now(), 
 									HttpStatus.BAD_REQUEST.value(),
-									"Invalid or tampered token",
+									"Invalid token",
 									""
 								);
 				response.setContentType("application/json");
