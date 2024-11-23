@@ -34,9 +34,20 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/{userId}")
-	public ResponseEntity<SuccessResponse> getUser(@PathVariable Long userId){
+	@GetMapping("/id/{userId}")
+	public ResponseEntity<SuccessResponse> getUserById(@PathVariable Long userId){
 		UserDTO userDTO = this.userService.getUser(userId);
+		SuccessResponse response = SuccessResponse.builder()
+									.statusCode(HttpStatus.OK.value())
+									.message("Fetched user Friends successfully")
+									.body(userDTO)
+									.build();
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping("/username/{username}")
+	public ResponseEntity<SuccessResponse> getUserByUsername(@PathVariable String username){
+		UserDTO userDTO = this.userService.getUserByUsername(username);
 		SuccessResponse response = SuccessResponse.builder()
 									.statusCode(HttpStatus.OK.value())
 									.message("Fetched user Friends successfully")

@@ -45,4 +45,22 @@ public class UserService {
 		
 		return userDTO;
 	}
+	
+	public UserDTO getUserByUsername(String username) {
+		Optional<User> optionalUser = this.userRepo.findByUsername(username);
+		
+		if(!optionalUser.isPresent())throw new UserNotFoundException("User with the username " + username + " does not exist");
+		
+		User user = optionalUser.get();
+		
+		UserDTO userDTO = UserDTO.builder()
+				.id(user.getId())
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.username(user.getUsername())
+				.email(user.getEmail())
+				.build();
+		
+		return userDTO;
+	}
 }

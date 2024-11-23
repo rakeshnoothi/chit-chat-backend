@@ -24,7 +24,7 @@ public class AuthenticationController {
 	private AuthenticationService authenticationService;
 
 	@PostMapping("/register")
-	public ResponseEntity<SuccessResponse> registerNewUser(@RequestBody UserRegistrationRequestDTO userRegistrationRequestDTO) {
+	public ResponseEntity<SuccessResponse> registerNewUser(@Valid @RequestBody UserRegistrationRequestDTO userRegistrationRequestDTO) {
 		this.authenticationService.registerNewUser(userRegistrationRequestDTO);
 		SuccessResponse response = SuccessResponse.builder()
 									.statusCode(HttpStatus.OK.value())
