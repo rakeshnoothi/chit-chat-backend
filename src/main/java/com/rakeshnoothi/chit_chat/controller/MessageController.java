@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.rakeshnoothi.chit_chat.dto.ChatMessageInboundDTO;
+import com.rakeshnoothi.chit_chat.dto.ChatMessageOutboundDTO;
 
 @Controller
 public class MessageController {
@@ -15,9 +16,13 @@ public class MessageController {
 	private SimpMessagingTemplate simpMessagingTemplate;
 	
 	@MessageMapping("/private/message")
-	public void sendPrivateMessage(ChatMessageInboundDTO message) {
-		String toUser = message.getToUser();
-		simpMessagingTemplate.convertAndSendToUser(toUser, "/queue/private/messages", message);
+	public void sendPrivateMessage(ChatMessageInboundDTO inboundMessage) {
+		ChatMessageOutboundDTO outBoundMessage = ChatMessageOutboundDTO.builder()
+			.fromUser(inboundMessage.getFromUser())
+			.toUser(inboundMessage.getToUser())
+			.message(inboundMessage.getMessage())
+			.build();
+		simpMessagingTemplate.convertAndSendToUser(inboundMessage.getToUser(), "/queue/private/messages", outBoundMessage);
 	}
 	
 	@MessageMapping("/channel/message")
