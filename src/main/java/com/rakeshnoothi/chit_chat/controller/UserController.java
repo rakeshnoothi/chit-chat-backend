@@ -1,5 +1,6 @@
 package com.rakeshnoothi.chit_chat.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rakeshnoothi.chit_chat.dto.ChannelDTO;
 import com.rakeshnoothi.chit_chat.dto.FriendDTO;
 import com.rakeshnoothi.chit_chat.dto.UserDTO;
 import com.rakeshnoothi.chit_chat.service.UserService;
@@ -56,4 +58,15 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 	
+	
+	@GetMapping("/channels/{userId}")
+	public ResponseEntity<SuccessResponse> getUserChannels(@PathVariable Long userId){
+		List<ChannelDTO> userChannels = this.userService.getUserChannels(userId);
+		SuccessResponse response = SuccessResponse.builder()
+									.statusCode(HttpStatus.OK.value())
+									.message("Fetched channels successfully")
+									.body(userChannels)
+									.build();
+		return ResponseEntity.ok(response);
+	}
 }

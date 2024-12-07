@@ -1,10 +1,12 @@
 package com.rakeshnoothi.chit_chat.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.rakeshnoothi.chit_chat.dto.ChannelDTO;
 import com.rakeshnoothi.chit_chat.dto.FriendDTO;
 import com.rakeshnoothi.chit_chat.dto.UserDTO;
 import com.rakeshnoothi.chit_chat.entity.User;
@@ -63,4 +65,10 @@ public class UserService {
 		
 		return userDTO;
 	}
+	
+	public List<ChannelDTO> getUserChannels(Long userId) {
+		List<ChannelDTO> userChannels = userRepo.findChannelsByUserId(userId);
+		return userChannels;
+	}
+	
 }

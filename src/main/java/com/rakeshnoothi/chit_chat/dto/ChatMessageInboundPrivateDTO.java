@@ -11,8 +11,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ChatMessageInboundDTO {
+public class ChatMessageInboundPrivateDTO {
 	private String toUser;
 	private String fromUser;
 	private String message;
+	private String id;
+	private Boolean isSent;
 }
