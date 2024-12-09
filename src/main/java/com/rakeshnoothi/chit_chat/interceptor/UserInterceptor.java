@@ -54,7 +54,6 @@ public class UserInterceptor implements ChannelInterceptor {
 			}
 			
 			try {
-				System.out.println(userDetailsService);
 				String username = this.jwtUtil.getUsernameFromToken(token);
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 				if (username != null && authentication == null) {

@@ -10,6 +10,8 @@ import com.rakeshnoothi.chit_chat.dto.ChatMessageInboundPrivateDTO;
 import com.rakeshnoothi.chit_chat.dto.ChatMessageOutboundChannelDTO;
 import com.rakeshnoothi.chit_chat.dto.ChatMessageOutboundPrivateDTO;
 import com.rakeshnoothi.chit_chat.repo.ChannelRepo;
+import com.rakeshnoothi.chit_chat.util.OnlineUsers;
+import com.rakeshnoothi.chit_chat.util.WaitingMessages;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,8 @@ public class MessageService {
 	
 	private final SimpMessagingTemplate simpMessagingTemplate;
 	private final ChannelRepo channelRepo;
+	private final OnlineUsers onlineUsers;
+	private final WaitingMessages waitingMessages;
 	
 	public void SendPrivateMessage(ChatMessageInboundPrivateDTO chatMessageInboundPrivateDTO) {
 		ChatMessageOutboundPrivateDTO outBoundMessage = ChatMessageOutboundPrivateDTO.builder()
@@ -28,8 +32,13 @@ public class MessageService {
 				.id(chatMessageInboundPrivateDTO.getId())
 				.isSent(chatMessageInboundPrivateDTO.getIsSent())
 				.build();
-		simpMessagingTemplate.convertAndSendToUser(chatMessageInboundPrivateDTO.getToUser(), "/queue/private/messages", outBoundMessage);
-			
+		
+		if(onlineUsers.isOnline(chatMessageInboundPrivateDTO.getToUser())) {
+			simpMessagingTemplate.convertAndSendToUser(chatMessageInboundPrivateDTO.getToUser(), "/queue/private/messages", outBoundMessage);
+			return;
+		}
+		waitingMessages.addMessage(chatMessageInboundPrivateDTO.getToUser(), outBoundMessage);
+		return;
 	}
 	
 	public void sendChannelMessage(ChatMessageInboundChannelDTO chatMessageInboundChannelDTO) {
